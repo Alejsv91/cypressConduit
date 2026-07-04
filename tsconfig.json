@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",         // <-- Cambia "es5" por "ES2020" o "ES6"
+      "lib": ["ES2020", "dom"],   // <-- Asegúrate de actualizar también la librería
+      "types": ["cypress", "node"],
+      "esModuleInterop": true
+    },
+    "include": ["**/*.ts"]
+  }
+  
