@@ -1,0 +1,23 @@
+# Dependencias de Node
+node_modules/
+
+# Cypress - Videos y Capturas de pantalla generados en fallos
+cypress/videos/
+cypress/screenshots/
+
+# Cypress - Descargas generadas durante las pruebas
+cypress/downloads/
+
+# Evitar subir credenciales, variables de entorno locales o tokens
+cypress.env.json
+.env
+.env.*
+
+# Reportes de pruebas (si usas mochawesome u otros reporteros)
+cypress/reports/
+mochawesome-report/
+
+# Archivos de caché del sistema y del editor de código
+.DS_Store
+.vscode/
+.idea/
