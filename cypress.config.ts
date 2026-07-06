@@ -12,7 +12,8 @@ const environments: Record<string, { baseUrl: string; apiUrl: string }> = {
 export default {
   projectId: "5553yz",
   allowCypressEnv: false,
-
+  video: true,
+  screenshotOnRunFailure: true,
   e2e: {
     setupNodeEvents(
       on: Cypress.PluginEvents,

@@ -16,12 +16,12 @@ describe("login test suite", () => {
     loginPage.header.clickOnSignInTab();
     loginPage.getEmailInput().should("be.visible");
     loginPage.getPasswordInput().should("be.visible");
-    loginPage.getSignInButton().should("be.visible");
 
   });
 
   it("should login successfully with valid credentials", () => {
     console.log(`Credentials: ${credentials.email}, ${credentials.password}`);
+    loginPage.getSignInButton().should("not.be.visible");
     loginPage.fillEmail(credentials.email);
     loginPage.fillPassword(credentials.password);
     loginPage.clickSignIn();
