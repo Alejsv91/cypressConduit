@@ -1,6 +1,6 @@
 import { constants } from "node:buffer";
 import { loginPage } from "../../support/pages/login.page";
-import { debug } from "node:console";
+import { debug, log } from "node:console";
 
 /// <reference types="cypress" />
 
@@ -14,6 +14,9 @@ describe("login test suite", () => {
     cy.visit("/");
     loginPage.header.getSignInTab().should("be.visible");
     loginPage.header.clickOnSignInTab();
+    loginPage.getEmailInput().should("be.visible");
+    loginPage.getPasswordInput().should("be.visible");
+    loginPage.getSignInButton().should("be.visible");
 
   });
 

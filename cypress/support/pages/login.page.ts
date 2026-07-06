@@ -5,6 +5,18 @@ class LoginPage extends MainPage{
     private passwordInput = () => cy.get('input[placeholder="Password"]');
     private signInButton = () => cy.get('button[type="submit"]');   
 
+    getEmailInput() {
+        return this.emailInput();
+    }
+
+    getPasswordInput() {
+        return this.passwordInput();
+    }
+
+    getSignInButton() {
+        return this.signInButton();
+    }
+
     fillEmail(email: string) {
         this.emailInput().type(email);
     }
