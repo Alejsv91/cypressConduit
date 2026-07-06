@@ -1,8 +1,17 @@
 {
+  "scripts": {
+    "cy:run": "cypress run",
+    "report:merge": "mochawesome-merge cypress/reports/mochawesome/*.json > cypress/reports/mochawesome/merged-report.json",
+    "report:generate": "marge cypress/reports/mochawesome/merged-report.json --reportDir cypress/reports/mochawesome --inline",
+    "test:full": "npm run cy:run && npm run report:merge && npm run report:generate"
+  },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.0",
     "cypress": "^15.18.0",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^4.4.1",
+    "mochawesome-report-generator": "^6.3.2",
     "typescript": "^6.0.3"
   }
 }

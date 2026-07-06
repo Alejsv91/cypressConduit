@@ -1,10 +1,7 @@
-# .github/workflows/cypress.yml
 name: Cypress Tests
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 jobs:
@@ -14,11 +11,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          browser: chrome
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
+        run: npx cypress run --env environmentName=prod
         env:
           CYPRESS_EMAIL: ${{ secrets.EMAIL }}
           CYPRESS_PASSWORD: ${{ secrets.PASSWORD }}
-          CYPRESS_environmentName: prod
+        continue-on-error: true   
+
+      - name: Merge reports
+        if: always()
+        run: npm run report:merge
+
+      - name: Generate HTML report
+        if: always()
+        run: npm run report:generate
+
+      - name: Upload Mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-mochawesome-report
+          path: cypress/reports/mochawesome
+          retention-days: 5

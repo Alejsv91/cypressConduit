@@ -10,6 +10,13 @@ const environments: Record<string, { baseUrl: string; apiUrl: string }> = {
 };
 
 export default {
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: 'cypress/reports/mochawesome',
+    overwrite: false,
+    html: false,
+    json: true,
+  },
   projectId: "5553yz",
   allowCypressEnv: false,
   video: true,
