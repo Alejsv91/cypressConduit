@@ -1,3 +1,5 @@
+import { loginPage } from '../../support/pages/login.page';
+
 /// <reference types="cypress" />
 
 describe('login test suite', () => {
@@ -8,5 +10,6 @@ describe('login test suite', () => {
 
     it('should login successfully with valid credentials', () => {
         console.log('Starting login test with valid credentials');
+        loginPage.header.clickOnSignInTab();
     })
 })

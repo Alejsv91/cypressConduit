@@ -1,5 +1,11 @@
-class Header {
-    protected get signInTab(){ return cy.contains('a', 'Sign in') }
+class HeaderComponent {
+  private get signInTab() {
+    return cy.contains("a", "Sign in");
+  }
+
+  public clickOnSignInTab() {
+    this.signInTab.click();
+  }
 }
 
-export const headerComponent = new Header()
+export const headerComponent = new HeaderComponent();

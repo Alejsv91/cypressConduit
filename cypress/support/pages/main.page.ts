@@ -1,7 +1,5 @@
-import { headerComponent } from "./components/header.component"; 
+import {headerComponent} from "./components/header.component"; 
 
 export class MainPage {
-    protected header = headerComponent;
-
-    
+    public header = headerComponent;
 }
