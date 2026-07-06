@@ -1,17 +1,26 @@
-import { loginPage } from '../../support/pages/login.page';
+import { constants } from "node:buffer";
+import { loginPage } from "../../support/pages/login.page";
+import { debug } from "node:console";
 
 /// <reference types="cypress" />
 
-describe('login test suite', () => {
-    beforeEach(() => {
-        // Tu código de prueba aquí
-        cy.visit('https://conduit.bondaracademy.com/');
-        loginPage.header.clickOnSignInTab();
-    })
+describe("login test suite", () => {
+  const credentials = { email: "", password: "" };
+  beforeEach(() => {
+    cy.env(["EMAIL", "PASSWORD"]).then((env) => {
+        debugger;
+        credentials.email = env.EMAIL;
+        credentials.password = env.PASSWORD;
+    });
+    cy.visit("/");
+    loginPage.header.clickOnSignInTab();
 
-    it('should login successfully with valid credentials', () => {
-        loginPage.fillEmail('Test');
-        loginPage.fillPassword('TestPassword');
-        loginPage.clickSignIn();
-    })
-})
+  });
+
+  it("should login successfully with valid credentials", () => {
+    console.log(`Credentials: ${credentials.email}, ${credentials.password}`);
+    loginPage.fillEmail(credentials.email);
+    loginPage.fillPassword(credentials.password);
+    loginPage.clickSignIn();
+  });
+});
