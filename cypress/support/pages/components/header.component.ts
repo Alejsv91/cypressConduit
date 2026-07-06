@@ -3,6 +3,10 @@ class HeaderComponent {
     return cy.contains("a", "Sign in");
   }
 
+  public getSignInTab(){
+    return this.signInTab;
+  }
+
   public clickOnSignInTab() {
     this.signInTab.click();
   }

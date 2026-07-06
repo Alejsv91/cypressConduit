@@ -12,6 +12,7 @@ describe("login test suite", () => {
         credentials.password = env.PASSWORD;
     });
     cy.visit("/");
+    loginPage.header.getSignInTab().should("be.visible");
     loginPage.header.clickOnSignInTab();
 
   });
