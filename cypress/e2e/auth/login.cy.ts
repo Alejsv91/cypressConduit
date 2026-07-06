@@ -8,7 +8,6 @@ describe("login test suite", () => {
   const credentials = { email: "", password: "" };
   beforeEach(() => {
     cy.env(["EMAIL", "PASSWORD"]).then((env) => {
-        debugger;
         credentials.email = env.EMAIL;
         credentials.password = env.PASSWORD;
     });
