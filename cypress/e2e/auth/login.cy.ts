@@ -21,7 +21,7 @@ describe("login test suite", () => {
 
   it("should login successfully with valid credentials", () => {
     console.log(`Credentials: ${credentials.email}, ${credentials.password}`);
-    loginPage.getSignInButton().should("not.be.visible");
+    loginPage.getSignInButton().should("be.visible");
     loginPage.fillEmail(credentials.email);
     loginPage.fillPassword(credentials.password);
     loginPage.clickSignIn();

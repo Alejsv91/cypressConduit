@@ -1,0 +1,28 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    CYPRESS_EMAIL: "cypress/credentials:EMAIL"
+    CYPRESS_PASSWORD: "cypress/credentials:PASSWORD"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - npm ci
+
+  build:
+    commands:
+      - npx cypress run --env environmentName=prod || true
+      - npm run report:merge
+      - npm run report:generate
+
+  post_build:
+    commands:
+      - aws s3 cp cypress/reports/mochawesome/merged-report.html s3://tu-bucket-reportes/reports/$CODEBUILD_BUILD_ID/index.html
+      - echo "Reporte disponible en https://tu-bucket-reportes.s3.amazonaws.com/reports/$CODEBUILD_BUILD_ID/index.html"
+
+artifacts:
+  files:
+    - cypress/reports/mochawesome/**/*

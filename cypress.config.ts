@@ -29,6 +29,7 @@ export default {
       const envName = config.env.environmentName || "dev";
       config.baseUrl = environments[envName]?.baseUrl;
       config.env.apiUrl = environments[envName]?.apiUrl;
+      console.log(`Running tests in ${envName} environment with baseUrl: ${config.baseUrl} and apiUrl: ${config.env.apiUrl}`);
 
       const envFilePath = path.resolve(__dirname, `./cypress.env.${envName}.json`);
       if(fs.existsSync(envFilePath)) {
