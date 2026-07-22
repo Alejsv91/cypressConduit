@@ -1,5 +1,7 @@
 import { loginPage } from "../../support/pages/login.page";
 import { Credentials } from "../../types/credentials.interfaces";
+import { URLS } from "../../support/constants/urls";
+import { APIEndpoints } from "../../support/constants/api-endpoints";
 
 /// <reference types="cypress" />
 
@@ -13,15 +15,26 @@ describe("login test suite", () => {
     cy.visit("/");
     loginPage.header.getSignInTab().should("be.visible");
     loginPage.header.clickOnSignInTab();
-    cy.url().should("contain", "/login");
+    cy.url().should("contain", URLS.LOGIN);
     loginPage.getEmailInput().should("be.visible");
     loginPage.getPasswordInput().should("be.visible");
     loginPage.getSignInButton().should("be.visible");
   })
 
-  it("should login successfully with valid credentials", () => {
+  it.only("should login successfully with valid credentials", () => {
+    cy.intercept("POST", APIEndpoints.LOGIN).as("loginRequest");
     userExecuteLogin(credentials);
-    cy.url().should("not.include", "/login");
+    cy.url().should("not.include", URLS.LOGIN);
+    cy.wait("@loginRequest").then((interception) =>{
+      let userResponse = interception.response?.body.user;
+      //Create the user interface and create a userFactory
+      expect(interception.response?.statusCode).to.eq(200);
+      expect(userResponse.email).to.eq(credentials.email);
+      expect(userResponse.username).to.eq('alejsv');
+      expect(userResponse.bio).to.eq(null);
+      expect(userResponse.image).to.eq("https://conduit-api.bondaracademy.com/images/smiley-cyrus.jpeg");
+      expect(userResponse.token).not.NaN;
+    });
   })
 
   it("When user don't filled the email input", () => {
