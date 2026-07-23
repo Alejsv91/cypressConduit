@@ -4,6 +4,7 @@ env:
   secrets-manager:
     CYPRESS_EMAIL: "cypress/credentials:EMAIL"
     CYPRESS_PASSWORD: "cypress/credentials:PASSWORD"
+    CYPRESS_USERNAME: "cypress/credentials:USERNAME"
 
 phases:
   install:

@@ -1,6 +1,6 @@
 import cypress from "cypress";
 import path from "node:path";
-import *  as fs from 'fs';
+import * as fs from "fs";
 
 const environments: Record<string, { baseUrl: string; apiUrl: string }> = {
   prod: {
@@ -10,9 +10,9 @@ const environments: Record<string, { baseUrl: string; apiUrl: string }> = {
 };
 
 export default {
-  reporter: 'mochawesome',
+  reporter: "mochawesome",
   reporterOptions: {
-    reportDir: 'cypress/reports/mochawesome',
+    reportDir: "cypress/reports/mochawesome",
     overwrite: false,
     html: false,
     json: true,
@@ -29,10 +29,15 @@ export default {
       const envName = config.env.environmentName || "dev";
       config.baseUrl = environments[envName]?.baseUrl;
       config.env.apiUrl = environments[envName]?.apiUrl;
-      console.log(`Running tests in ${envName} environment with baseUrl: ${config.baseUrl} and apiUrl: ${config.env.apiUrl}`);
+      console.log(
+        `Running tests in ${envName} environment with baseUrl: ${config.baseUrl} and apiUrl: ${config.env.apiUrl}`
+      );
 
-      const envFilePath = path.resolve(__dirname, `./cypress.env.${envName}.json`);
-      if(fs.existsSync(envFilePath)) {
+      const envFilePath = path.resolve(
+        __dirname,
+        `./cypress.env.${envName}.json`
+      );
+      if (fs.existsSync(envFilePath)) {
         const fileSecrets = JSON.parse(fs.readFileSync(envFilePath, "utf-8"));
         config.env = { ...config.env, ...fileSecrets };
       }

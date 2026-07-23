@@ -3,5 +3,5 @@ export interface User {
     username: string,
     bio: string | null,
     image: string, 
-    token: string
+    token?: string
 }
