@@ -2,6 +2,8 @@ import { loginPage } from "../../support/pages/login.page";
 import { Credentials } from "../../types/credentials.interfaces";
 import { URLS } from "../../support/constants/urls";
 import { APIEndpoints } from "../../support/constants/api-endpoints";
+import { User } from "../../types/user.interfaces";
+import { ok } from "node:assert";
 
 /// <reference types="cypress" />
 
@@ -23,11 +25,13 @@ describe("login test suite", () => {
 
   it.only("should login successfully with valid credentials", () => {
     cy.intercept("POST", APIEndpoints.LOGIN).as("loginRequest");
+    cy.intercept("GET", APIEndpoints.ARTICLES).as("articlesRequest");
+    cy.intercept("GET", APIEndpoints.TAGS).as("tagsRequest");
+
     userExecuteLogin(credentials);
     cy.url().should("not.include", URLS.LOGIN);
     cy.wait("@loginRequest").then((interception) =>{
-      let userResponse = interception.response?.body.user;
-      //Create the user interface and create a userFactory
+      let userResponse: User = interception.response?.body.user;
       expect(interception.response?.statusCode).to.eq(200);
       expect(userResponse.email).to.eq(credentials.email);
       expect(userResponse.username).to.eq('alejsv');
@@ -35,6 +39,8 @@ describe("login test suite", () => {
       expect(userResponse.image).to.eq("https://conduit-api.bondaracademy.com/images/smiley-cyrus.jpeg");
       expect(userResponse.token).not.NaN;
     });
+    cy.wait("@articlesRequest").its("response.statusCode").should("eq", 200);
+    cy.wait("@tagsRequest").its("response.statusCode").should("eq", 200);
   })
 
   it("When user don't filled the email input", () => {

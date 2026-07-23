@@ -1,3 +1,3 @@
 export const URLS = {
-    LOGIN: "/login"
+    LOGIN: "/login",
 } as const;
