@@ -1,9 +1,9 @@
-import { loginPage } from "../../support/pages/login.page";
-import { Credentials } from "../../types/credentials.interfaces";
-import { URLS } from "../../support/constants/urls";
-import { APIEndpoints } from "../../support/constants/api-endpoints";
-import { User } from "../../types/user.interfaces";
-import { realUser } from "../../support/factories/userFactory";
+import { loginPage } from "../../../support/pages/login.page";
+import { Credentials } from "../../../types/credentials.interfaces";
+import { URLS } from "../../../support/constants/urls";
+import { APIEndpoints } from "../../../support/constants/api-endpoints";
+import { User } from "../../../types/user.interfaces";
+import { realUser } from "../../../support/factories/userFactory";
 
 /// <reference types="cypress" />
 

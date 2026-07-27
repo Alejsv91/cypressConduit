@@ -1,4 +1,8 @@
 /// <reference types="cypress" />
+
+import { Credentials } from "../types/credentials.interfaces";
+import { APIEndpoints } from "../support/constants/api-endpoints";
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -25,13 +29,30 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      loginByApi(credentials: Credentials): Cypress.Chainable<Cypress.Response<any>>
+    }
+  }
+}
+
+Cypress.Commands.add('loginByApi', (credentials: Credentials)  => { 
+    let apiUrl
+    cy.env(["apiUrl", "EMAIL", "PASSWORD"]).then((env) => {
+        apiUrl = env.apiUrl;
+        cy.request({
+            method: "POST",
+            url: `${apiUrl}${APIEndpoints.LOGIN}`,
+            failOnStatusCode: false,
+            body: {
+              user: {
+                email: credentials.email,
+                password: credentials.password,
+              },
+            },
+          }).then((response) =>{
+            return response;
+          })
+      });
+ })

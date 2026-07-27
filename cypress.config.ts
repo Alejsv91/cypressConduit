@@ -5,7 +5,7 @@ import * as fs from "fs";
 const environments: Record<string, { baseUrl: string; apiUrl: string }> = {
   prod: {
     baseUrl: "https://conduit.bondaracademy.com",
-    apiUrl: "https://conduit-api.bondaracademy.com/api",
+    apiUrl: "https://conduit-api.bondaracademy.com",
   },
 };
 
