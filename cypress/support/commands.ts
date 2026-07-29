@@ -2,6 +2,8 @@
 
 import { Credentials } from "../types/credentials.interfaces";
 import { APIEndpoints } from "../support/constants/api-endpoints";
+import { User } from "../types/user.interfaces";
+import { articles } from "./pages/articles.page";
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -32,27 +34,44 @@ import { APIEndpoints } from "../support/constants/api-endpoints";
 declare global {
   namespace Cypress {
     interface Chainable {
-      loginByApi(credentials: Credentials): Cypress.Chainable<Cypress.Response<any>>
+      loginByApi(
+        credentials: Credentials
+      ): Cypress.Chainable<Cypress.Response<any>>;
+      createSession(credentials: Credentials, user: User): any;
     }
   }
 }
 
-Cypress.Commands.add('loginByApi', (credentials: Credentials)  => { 
-    let apiUrl
-    cy.env(["apiUrl", "EMAIL", "PASSWORD"]).then((env) => {
-        apiUrl = env.apiUrl;
-        cy.request({
-            method: "POST",
-            url: `${apiUrl}${APIEndpoints.LOGIN}`,
-            failOnStatusCode: false,
-            body: {
-              user: {
-                email: credentials.email,
-                password: credentials.password,
-              },
-            },
-          }).then((response) =>{
-            return response;
-          })
-      });
- })
+Cypress.Commands.add("loginByApi", (credentials: Credentials) => {
+  let apiUrl;
+  cy.env(["apiUrl"]).then((env) => {
+    apiUrl = env.apiUrl;
+    cy.request({
+      method: "POST",
+      url: `${apiUrl}${APIEndpoints.LOGIN}`,
+      failOnStatusCode: false,
+      body: {
+        user: {
+          email: credentials.email,
+          password: credentials.password,
+        },
+      },
+    }).then((response) => {
+      return response;
+    });
+  });
+});
+
+Cypress.Commands.add("createSession", (credentials: Credentials, user: User) => {
+  cy.session(credentials.email, () => {
+    cy.loginByApi(credentials).then((response) => {
+      window.localStorage.setItem("jwtToken", response.body.user.token);
+    });
+  }, {
+    validate() {
+      cy.visit('/');
+      // MainPage.header.
+      articles.header.getUsernameImg(user).should('contain', user.username);
+    }
+  });
+});
