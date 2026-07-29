@@ -9,21 +9,22 @@ describe("Testing for articles section", () => {
   let resp: Cypress.Response<User>;
   let user: User;
 
-  before(() => {
+  beforeEach(() => {
     validCredentials().then((creds) => {
       credentials = creds;
       realUser().then((userInfo) => {
         user = userInfo;
         cy.createSession(credentials, userInfo);
+        cy.visit("/");
       })
     }); 
   });
 
-  beforeEach(()=>{
-    cy.visit("/");
-  })
-
   it("First article test", () => {
     articles.header.getUsernameImg(user).should('contain', user.username);
   });
+
+  it("Test two articles", () => {
+    articles.header.getUsernameImg(user).should('contain', user.username);
+  })
 });

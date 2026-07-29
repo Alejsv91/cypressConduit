@@ -70,7 +70,6 @@ Cypress.Commands.add("createSession", (credentials: Credentials, user: User) => 
   }, {
     validate() {
       cy.visit('/');
-      // MainPage.header.
       articles.header.getUsernameImg(user).should('contain', user.username);
     }
   });
