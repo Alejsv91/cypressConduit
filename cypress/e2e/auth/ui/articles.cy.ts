@@ -3,11 +3,20 @@ import { Credentials } from "../../../types/credentials.interfaces";
 import { validCredentials } from "../../../support/factories/credentialsFactory";
 import { User } from "../../../types/user.interfaces";
 import { articles } from "../../../support/pages/articles.page";
+import { Article } from "../../../types/article.interfaces";
+import { debug } from "node:console";
+
 
 describe("Testing for articles section", () => {
   let credentials: Credentials;
-  let resp: Cypress.Response<User>;
   let user: User;
+  let articleFixture: Article;
+
+  before(() => {
+    cy.fixture("articles").then((articles) => {
+      articleFixture = { ...articles.articlesWithMultipleTags };
+    });
+  });
 
   beforeEach(() => {
     validCredentials().then((creds) => {
@@ -16,15 +25,30 @@ describe("Testing for articles section", () => {
         user = userInfo;
         cy.createSession(credentials, userInfo);
         cy.visit("/");
-      })
-    }); 
+      });
+    });
   });
 
-  it("First article test", () => {
-    articles.header.getUsernameImg(user).should('contain', user.username);
+  //Create article
+  it("Create the article by API", () => {
+    articles.header.getNewArticleButton().click();
+    articles
+      .getTitleInput()
+      .CheckEnabledVisibleAndType(`${articleFixture.title} ${Date.now()}`);
+    articles.getDescriptionInput().CheckEnabledVisibleAndType(articleFixture.description);
+    articles.getBodyInput().CheckEnabledVisibleAndType(articleFixture.body);
+    articles
+      .getTagsInput()
+      .should("be.visible")
+      .should("be.enabled")
+      .type("automation")
+      .type("{enter}");
+    articles.getPublishArticleButton().should("be.visible").click();
+    //validate the article is created
   });
 
-  it("Test two articles", () => {
-    articles.header.getUsernameImg(user).should('contain', user.username);
-  })
+  //read the article
+  //Delete article
+  //delete all the trash
+  //update the artcile
 });

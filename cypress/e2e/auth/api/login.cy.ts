@@ -6,7 +6,7 @@ import { fakeCredentials } from "../../../support/factories/credentialsFactory";
 
 describe("Login test for Login", () => {
   let apiUrl: string;
-  let credentials: Credentials = { email: "", password: "" };
+  let credentials: Credentials;
 
   before(() => {
     cy.env(["apiUrl", "EMAIL", "PASSWORD"]).then((env) => {

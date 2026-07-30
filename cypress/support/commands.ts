@@ -38,9 +38,22 @@ declare global {
         credentials: Credentials
       ): Cypress.Chainable<Cypress.Response<any>>;
       createSession(credentials: Credentials, user: User): any;
+      CheckEnabledVisibleAndType(text: string): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
+
+Cypress.Commands.add(
+  "CheckEnabledVisibleAndType",
+  { prevSubject: true },
+  (subject: JQuery<HTMLElement>, text: string) => {
+    cy.wrap(subject)
+      .should("be.visible")
+      .should("be.enabled")
+      .clear()
+      .type(text);
+  }
+);
 
 Cypress.Commands.add("loginByApi", (credentials: Credentials) => {
   let apiUrl;
@@ -62,15 +75,22 @@ Cypress.Commands.add("loginByApi", (credentials: Credentials) => {
   });
 });
 
-Cypress.Commands.add("createSession", (credentials: Credentials, user: User) => {
-  cy.session(credentials.email, () => {
-    cy.loginByApi(credentials).then((response) => {
-      window.localStorage.setItem("jwtToken", response.body.user.token);
-    });
-  }, {
-    validate() {
-      cy.visit('/');
-      articles.header.getUsernameImg(user).should('contain', user.username);
-    }
-  });
-});
+Cypress.Commands.add(
+  "createSession",
+  (credentials: Credentials, user: User) => {
+    cy.session(
+      credentials.email,
+      () => {
+        cy.loginByApi(credentials).then((response) => {
+          window.localStorage.setItem("jwtToken", response.body.user.token);
+        });
+      },
+      {
+        validate() {
+          cy.visit("/");
+          articles.header.getUsernameImg(user).should("contain", user.username);
+        },
+      }
+    );
+  }
+);
