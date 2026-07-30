@@ -1,6 +1,6 @@
 import { MainPage } from "./main.page";
 
-class ArticlesPage extends MainPage {
+class EditArticlePage extends MainPage {
   private get publishArticleButton() {
     return cy.get("form > fieldset > button.btn-primary");
   }
@@ -56,4 +56,4 @@ class ArticlesPage extends MainPage {
     return this.titleInput;
   }
 }
-export const articles = new ArticlesPage();
+export const editArticles = new EditArticlePage();

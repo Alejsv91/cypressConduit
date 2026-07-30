@@ -3,7 +3,7 @@
 import { Credentials } from "../types/credentials.interfaces";
 import { APIEndpoints } from "../support/constants/api-endpoints";
 import { User } from "../types/user.interfaces";
-import { articles } from "./pages/articles.page";
+import { editArticles } from "./pages/editArticles.page";
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -88,7 +88,7 @@ Cypress.Commands.add(
       {
         validate() {
           cy.visit("/");
-          articles.header.getUsernameImg(user).should("contain", user.username);
+          editArticles.header.getUsernameImg(user).should("contain", user.username);
         },
       }
     );

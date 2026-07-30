@@ -4,7 +4,7 @@
             "title": "Test article from cypress",
             "description": "This is the description for this artcile",
             "body": "This is the body description",
-            "tags":[
+            "tagList":[
                 "automation",
                 "cypress",
                 "typescript"
