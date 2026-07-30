@@ -4,8 +4,6 @@ import { validCredentials } from "../../../support/factories/credentialsFactory"
 import { User } from "../../../types/user.interfaces";
 import { articles } from "../../../support/pages/articles.page";
 import { Article } from "../../../types/article.interfaces";
-import { debug } from "node:console";
-
 
 describe("Testing for articles section", () => {
   let credentials: Credentials;
@@ -32,19 +30,25 @@ describe("Testing for articles section", () => {
   //Create article
   it("Create the article by API", () => {
     articles.header.getNewArticleButton().click();
+    cy.location("pathname").should("contain", "editor");
     articles
       .getTitleInput()
-      .CheckEnabledVisibleAndType(`${articleFixture.title} ${Date.now()}`);
-    articles.getDescriptionInput().CheckEnabledVisibleAndType(articleFixture.description);
-    articles.getBodyInput().CheckEnabledVisibleAndType(articleFixture.body);
+      .checkEnabledVisibleAndType(`${articleFixture.title} ${Date.now()}`);
     articles
-      .getTagsInput()
+      .getDescriptionInput()
+      .checkEnabledVisibleAndType(articleFixture.description);
+    articles.getBodyInput().checkEnabledVisibleAndType(articleFixture.body);
+    addTagsOnArticle(articleFixture.tags);
+    articles
+      .getTagList()
       .should("be.visible")
-      .should("be.enabled")
-      .type("automation")
-      .type("{enter}");
-    articles.getPublishArticleButton().should("be.visible").click();
-    //validate the article is created
+      .then(() => {
+        articles.getTagsLength().then((total) => {
+          expect(total).to.equal(articleFixture.tags.length);
+        });
+      });
+    // articles.getPublishArticleButton().should("be.visible").click();
+
   });
 
   //read the article
@@ -52,3 +56,12 @@ describe("Testing for articles section", () => {
   //delete all the trash
   //update the artcile
 });
+
+function addTagsOnArticle(tags: string[]) {
+  tags.forEach((tag) => {
+    articles.getTagsInput().checkEnabledVisibleAndType(tag).type("{enter}");
+    articles.getTagByText(tag).should('be.visible');
+    articles.getTagsInput().should('be.empty');
+
+  });
+}

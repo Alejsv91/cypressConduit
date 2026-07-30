@@ -38,13 +38,13 @@ declare global {
         credentials: Credentials
       ): Cypress.Chainable<Cypress.Response<any>>;
       createSession(credentials: Credentials, user: User): any;
-      CheckEnabledVisibleAndType(text: string): Chainable<JQuery<HTMLElement>>;
+      checkEnabledVisibleAndType(text: string): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
 
 Cypress.Commands.add(
-  "CheckEnabledVisibleAndType",
+  "checkEnabledVisibleAndType",
   { prevSubject: true },
   (subject: JQuery<HTMLElement>, text: string) => {
     cy.wrap(subject)

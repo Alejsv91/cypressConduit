@@ -1,6 +1,6 @@
 import { MainPage } from "./main.page";
 
-class Articles extends MainPage {
+class ArticlesPage extends MainPage {
   private get publishArticleButton() {
     return cy.get("form > fieldset > button.btn-primary");
   }
@@ -20,7 +20,23 @@ class Articles extends MainPage {
     return cy.get('fieldset > textarea[formcontrolname="body"]');
   }
 
-  public getPublishArticleButton(){
+  private get tagList() {
+    return cy.get("div.tag-list");
+  }
+
+  public getTagByText(tagText: string) {
+    return this.tagList.find("span").contains(` ${tagText} `);
+  }
+
+  public getTagsLength(): Cypress.Chainable<number> {
+    return this.tagList.find("span > i").its("length");
+  }
+
+  public getTagList() {
+    return this.tagList;
+  }
+
+  public getPublishArticleButton() {
     return this.publishArticleButton;
   }
 
@@ -40,4 +56,4 @@ class Articles extends MainPage {
     return this.titleInput;
   }
 }
-export const articles = new Articles();
+export const articles = new ArticlesPage();
