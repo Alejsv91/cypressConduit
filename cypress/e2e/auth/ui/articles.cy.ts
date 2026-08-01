@@ -58,20 +58,7 @@ describe("Testing for articles section", () => {
       const articleResponse: ArticleResponse = {
         ...req.response?.body.article,
       };
-      console.log(`This is the slug ${articleResponse.slug}`);
-      expect(articleResponse.slug).not.NaN;
-      expect(articleResponse.title).equal(articleFixture.title);
-      expect(articleResponse.description).equal(articleFixture.description);
-      expect(articleResponse.body).equal(articleFixture.body);
-      checkTags(articleResponse, articleFixture);
-      expect(articleResponse.createdAt).not.NaN;
-      expect(articleResponse.updatedAt).not.NaN;
-      expect(articleResponse.favorited).equal(false);
-      expect(articleResponse.favoritesCount).equal(0);
-      expect(articleResponse.author.bio).equal(user.bio);
-      expect(articleResponse.author.following).equal(false);
-      expect(articleResponse.author.image).equal(user.image);
-      expect(articleResponse.author.username).equal(user.username);
+      cy.validateArticlesPostResponse(articleResponse, articleFixture, user);
 
       //UI Validation
       cy.location("pathname").should(

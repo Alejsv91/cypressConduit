@@ -4,6 +4,7 @@ import { Credentials } from "../types/credentials.interfaces";
 import { APIEndpoints } from "../support/constants/api-endpoints";
 import { User } from "../types/user.interfaces";
 import { editArticles } from "./pages/editArticles.page";
+import { Article, ArticleResponse } from "../types/article.interfaces";
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -37,11 +38,44 @@ declare global {
       loginByApi(
         credentials: Credentials
       ): Cypress.Chainable<Cypress.Response<any>>;
-      createSession(credentials: Credentials, user: User): any;
+      createSession(credentials: Credentials, user: User): Chainable<void>;
       checkEnabledVisibleAndType(text: string): Chainable<JQuery<HTMLElement>>;
+      validateArticlesPostResponse(
+        articleRequestResponse: ArticleResponse,
+        expectedArticle: Article,
+        user: User
+      ): Chainable<void>;
     }
   }
 }
+
+function checkTags(articleResponse: ArticleResponse, articleFixture: Article) {
+  articleFixture.tagList.forEach((tag: string) => {
+    expect(articleResponse.tagList).to.include(tag);
+  });
+  expect(articleFixture.tagList.length).to.equal(
+    articleResponse.tagList.length
+  );
+}
+
+Cypress.Commands.add(
+  "validateArticlesPostResponse",
+  (articleResponse: ArticleResponse, expectedArticle: Article, user: User) => {
+    expect(articleResponse.slug).not.NaN;
+    expect(articleResponse.title).equal(expectedArticle.title);
+    expect(articleResponse.description).equal(expectedArticle.description);
+    expect(articleResponse.body).equal(expectedArticle.body);
+    checkTags(articleResponse, expectedArticle);
+    expect(articleResponse.createdAt).not.NaN;
+    expect(articleResponse.updatedAt).not.NaN;
+    expect(articleResponse.favorited).equal(false);
+    expect(articleResponse.favoritesCount).equal(0);
+    expect(articleResponse.author.bio).equal(user.bio);
+    expect(articleResponse.author.following).equal(false);
+    expect(articleResponse.author.image).equal(user.image);
+    expect(articleResponse.author.username).equal(user.username);
+  }
+);
 
 Cypress.Commands.add(
   "checkEnabledVisibleAndType",
@@ -82,13 +116,17 @@ Cypress.Commands.add(
       credentials.email,
       () => {
         cy.loginByApi(credentials).then((response) => {
-          window.localStorage.setItem("jwtToken", response.body.user.token);
+          debugger;
+          window.localStorage.setItem("jwtToken", response.body.user.token!);
         });
       },
       {
         validate() {
-          cy.visit("/");
-          editArticles.header.getUsernameImg(user).should("contain", user.username);
+          cy.visit("/").then(() => {
+            editArticles.header
+              .getUsernameImg(user)
+              .should("contain", user.username);
+          });
         },
       }
     );
