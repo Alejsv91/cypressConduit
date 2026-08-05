@@ -4,25 +4,31 @@ phases:
   install:
     runtime-versions:
       nodejs: 20
-    commands: 
+    commands:
+      - apt-get update
+      - apt-get install -y wget gnupg
+      - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+      - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+      - apt-get update
+      - apt-get install -y google-chrome-stable
       - npm ci
-  
+
   build:
     commands:
-      - npx cypress run --env environmentName=prod || true
-  
+      - npx cypress run --env environmentName=prod --browser chrome || true
+
   post_build:
     commands:
-      - npm run report: merge
-      - npm run report: generate
+      - npm run report:merge
+      - npm run report:generate
 
-env: 
+env:
   secrets-manager:
     CYPRESS_EMAIL: "cypress/creds:EMAIL"
     CYPRESS_PASSWORD: "cypress/creds:PASSWORD"
-    CYPRESS_USRENAME: "cypress/creds:USERNAME"
+    CYPRESS_USERNAME: "cypress/creds:USERNAME"
 
 artifacts:
   files:
     - '**/*'
-    base-directory: cypress/resports/mochawesome
+  base-directory: cypress/reports/mochawesome
